@@ -68,4 +68,39 @@ Node* MakeTree(int first, int last, char* mass)
 }
 
 ​//​ CalcTree - функция для подсчёта выражения
+float CalcTree(Node* tree) {
+    // Базовый случай: если дерево пустое, возвращаем 0
+    if (tree == nullptr) {
+        return 0;
+    }
+
+    // Базовый случай: если это лист (число), возвращаем его значение
+    if (tree->left == nullptr && tree->right == nullptr) {
+        return tree->num - '0'; // Преобразуем символ числа в float
+    }
+
+    // Рекурсивно вычисляем значения левого и правого поддерева
+    float left_value = CalcTree(tree->left);
+    float right_value = CalcTree(tree->right);
+
+    // Вычисляем значение текущего узла на основе оператора
+    switch (tree->sign) {
+        case '+':
+            return left_value + right_value;
+        case '-':
+            return left_value - right_value;
+        case '*':
+            return left_value * right_value;
+        case '/':
+            if (right_value != 0) {
+                return left_value / right_value;
+            } else {
+                std::cerr << "Ошибка: деление на ноль" << std::endl;
+                exit(EXIT_FAILURE); // Выход с ошибкой
+            }
+        default:
+            std::cerr << "Неизвестный оператор: " << tree->sign << std::endl;
+            exit(EXIT_FAILURE); // Выход с ошибкой
+    }
+}
 
